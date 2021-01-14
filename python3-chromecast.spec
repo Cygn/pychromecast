@@ -8,7 +8,7 @@ Summary:        Python module to talk to Google Chromecast
 
 License:        MIT
 URL:            https://github.com/balloob/pychromecast
-Source0:        python3-chromecast-7.7.2.tar.gz
+Source0:        pychromecast-7.7.2.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel
