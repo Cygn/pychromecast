@@ -1,5 +1,5 @@
 # Created by pyp2rpm-3.3.5
-%global pypi_name PyChromecast
+%global pypi_name pychromecast
 
 Name:           python3-chromecast
 Version:        7.7.2
@@ -8,11 +8,12 @@ Summary:        Python module to talk to Google Chromecast
 
 License:        MIT
 URL:            https://github.com/balloob/pychromecast
-Source0:        https://files.pythonhosted.org/packages/7c/a0/7c34881d2130d43feb40a37961e71a6158c8df5c1c2e7fed5b57299d5c50/PyChromecast-7.7.2.tar.gz
+Source0:        python3-chromecast-7.7.2.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python%{python3_pkgversion}-pip
 
 %description
 Library for Python 3.6+ to communicate with the Google Chromecast.
@@ -20,9 +21,10 @@ Library for Python 3.6+ to communicate with the Google Chromecast.
 %package -n     python%{python3_pkgversion}-%{pypi_name}
 Summary:        Python module to talk to Google Chromecast
 
-Requires:       python%{python3_pkgversion}-autobahn
 Requires:       python%{python3_pkgversion}-requests
-Requires:       python%{python3_pkgversion}-twisted
+Requires:       python%{python3_pkgversion}-zeroconf
+Requires:       python%{python3_pkgversion}-protobuf
+
 %description -n python%{python3_pkgversion}-%{pypi_name}
 UNKNOWN
 
