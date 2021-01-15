@@ -27,8 +27,7 @@ Requires:       python%{python3_pkgversion}-zeroconf
 Requires:       python%{python3_pkgversion}-protobuf
 
 %description
-Library for Python 3 to communicate with the Google Chromecast. It
-currently supports:
+Library for Python 3 to communicate with the Google Chromecast. It currently supports:
 
 -  Auto discovering connected Chromecasts on the network
 -  Start the default media receiver and play any online media
