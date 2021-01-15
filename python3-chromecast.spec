@@ -1,18 +1,21 @@
 %global pypi_name pychromecast
 %define name python3-chromecast
+%define srcname pychromecast
+%define version 7.7.2
+%define unmangled_version 7.7.2
+%define release 1
 
 Name:       	%{name}    
-Version:        7.7.2
-Release:        1%{?dist}
-Summary:        Python module to talk to Google Chromecast
-
-License:        MIT
-URL:            https://github.com/balloob/pychromecast
-Source0:        python3-chromecast-7.7.2.tar.gz
-BuildArch:      noarch
-BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Prefix: 	%{_prefix}
-Summary:        Python module to talk to Google Chromecast devices.
+Version:      %{version}
+Release:      %{release}
+Source0:      %{name}-%{unmangled_version}.tar.gz
+Summary:      Python module to talk to Google Chromecast
+License:      MIT
+URL:          https://github.com/balloob/pychromecast
+BuildArch:    noarch
+BuildRoot: 	  %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Prefix: 	    %{_prefix}
+Packager:     Sinan H <sinan@haliyo.net>
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-setuptools
