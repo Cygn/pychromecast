@@ -18,17 +18,15 @@ BuildRequires:  python%{python3_pkgversion}-pip
 %description
 Library for Python 3.6+ to communicate with the Google Chromecast.
 
-%package -n     python%{python3_pkgversion}-%{pypi_name}
-Summary:        Python module to talk to Google Chromecast
+%package -n     python%{python3_pkgversion}-chromecast
+Summary:        Python module to talk to Google Chromecast devices.
 
 Requires:       python%{python3_pkgversion}-requests
 Requires:       python%{python3_pkgversion}-zeroconf
 Requires:       python%{python3_pkgversion}-protobuf
 
-
 %prep
 %autosetup -n %{pypi_name}-%{version}
-
 
 %build
 %{__python3} setup.py build
