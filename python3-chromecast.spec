@@ -1,6 +1,6 @@
-%global pypi_name pychromecast
+%global pypi_name PyChromecast
 %define name python3-chromecast
-%define srcname pychromecast
+%define srcname PyChromecast
 %define version 7.7.2
 %define unmangled_version 7.7.2
 %define release 1
@@ -42,7 +42,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{name}
 %{python3_sitelib}/pychromecast
 %{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
-%doc README.md
+%doc README.rst
 
 %changelog
 * Thu Jan 14 2021 mockbuilder - 7.7.2-1
