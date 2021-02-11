@@ -1,9 +1,9 @@
 %global pypi_name PyChromecast
 %define name python3-chromecast
 %define srcname PyChromecast
-%define version 7.7.2
-%define unmangled_version 7.7.2
-%define release 2
+%define version 8.1.0
+%define unmangled_version 8.1.0
+%define release 1
 
 Name:       	%{name}    
 Version:      %{version}
@@ -56,5 +56,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.rst
 
 %changelog
+* Thu Feb 11 2021 - 8.1.0
+- fetch from upstream
 * Thu Jan 14 2021 mockbuilder - 7.7.2-1
 - Initial package. SH.
