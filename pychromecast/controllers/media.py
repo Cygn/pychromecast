@@ -2,6 +2,7 @@
 Provides a controller for controlling the default media players
 on the Chromecast.
 """
+import abc
 from datetime import datetime
 import logging
 
@@ -9,6 +10,7 @@ from collections import namedtuple
 import threading
 
 from ..config import APP_MEDIA_RECEIVER
+from ..const import MESSAGE_TYPE
 from . import BaseController
 
 STREAM_TYPE_UNKNOWN = "UNKNOWN"
@@ -20,8 +22,6 @@ MEDIA_PLAYER_STATE_BUFFERING = "BUFFERING"
 MEDIA_PLAYER_STATE_PAUSED = "PAUSED"
 MEDIA_PLAYER_STATE_IDLE = "IDLE"
 MEDIA_PLAYER_STATE_UNKNOWN = "UNKNOWN"
-
-MESSAGE_TYPE = "type"
 
 TYPE_EDIT_TRACKS_INFO = "EDIT_TRACKS_INFO"
 TYPE_GET_STATUS = "GET_STATUS"
@@ -310,12 +310,20 @@ class MediaStatus:
         return "<MediaStatus {}>".format(info)
 
 
+class MediaStatusListener(abc.ABC):
+    """Listener for receiving media status events."""
+
+    @abc.abstractmethod
+    def new_media_status(self, status: MediaStatus):
+        """Updated media status."""
+
+
 # pylint: disable=too-many-public-methods
 class MediaController(BaseController):
     """ Controller to interact with Google media namespace. """
 
     def __init__(self):
-        super(MediaController, self).__init__("urn:x-cast:com.google.cast.media")
+        super().__init__("urn:x-cast:com.google.cast.media")
 
         self.media_session_id = 0
         self.status = MediaStatus()
@@ -341,7 +349,7 @@ class MediaController(BaseController):
 
         return False
 
-    def register_status_listener(self, listener):
+    def register_status_listener(self, listener: MediaStatusListener):
         """Register a listener for new media statuses. A new status will
         call listener.new_media_status(status)"""
         self._status_listeners.append(listener)
@@ -641,6 +649,6 @@ class MediaController(BaseController):
 
     def tear_down(self):
         """ Called when controller is destroyed. """
-        super(MediaController, self).tear_down()
+        super().tear_down()
 
         self._status_listeners[:] = []
