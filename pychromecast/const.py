@@ -16,8 +16,14 @@ CAST_TYPES = {
     "chromecast audio": CAST_TYPE_AUDIO,
     "google home": CAST_TYPE_AUDIO,
     "google home mini": CAST_TYPE_AUDIO,
+    "google nest mini": CAST_TYPE_AUDIO,
+    "nest audio": CAST_TYPE_AUDIO,
     "google cast group": CAST_TYPE_GROUP,
 }
 
 # Known models not manufactured by Google
 CAST_MANUFACTURERS = {}
+
+MESSAGE_TYPE = "type"
+REQUEST_ID = "requestId"
+SESSION_ID = "sessionId"

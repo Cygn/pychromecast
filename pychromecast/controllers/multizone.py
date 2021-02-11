@@ -1,9 +1,13 @@
 """
 Controller to monitor audio group members.
 """
+import abc
 import logging
 
 from . import BaseController
+from .media import MediaStatus
+from .receiver import CastStatus
+from ..const import MESSAGE_TYPE
 from ..socket_client import (
     CONNECTION_STATUS_CONNECTED,
     CONNECTION_STATUS_DISCONNECTED,
@@ -12,7 +16,6 @@ from ..socket_client import (
 
 _LOGGER = logging.getLogger(__name__)
 
-MESSAGE_TYPE = "type"
 MULTIZONE_NAMESPACE = "urn:x-cast:com.google.cast.multizone"
 TYPE_CASTING_GROUPS = "CASTING_GROUPS"
 TYPE_DEVICE_ADDED = "DEVICE_ADDED"
@@ -90,6 +93,26 @@ class Listener:
         """Handle reception of audio group status."""
 
 
+class MultiZoneManagerListener(abc.ABC):
+    """Listener for receiving audio group events for a cast device."""
+
+    @abc.abstractmethod
+    def added_to_multizone(self, group_uuid: str):
+        """The cast has been added to group identified by group_uuid."""
+
+    @abc.abstractmethod
+    def removed_from_multizone(self, group_uuid: str):
+        """The cast has been removed from group identified by group_uuid."""
+
+    @abc.abstractmethod
+    def multizone_new_media_status(self, group_uuid: str, media_status: MediaStatus):
+        """The group identified by group_uuid, of which the cast is a member, has new media status."""
+
+    @abc.abstractmethod
+    def multizone_new_cast_status(self, group_uuid: str, cast_status: CastStatus):
+        """The group identified by group_uuid, of which the cast is a member, has new status."""
+
+
 class MultizoneManager:
     """ Manage audio groups. """
 
@@ -117,7 +140,7 @@ class MultizoneManager:
         for member in self._casts.values():
             member["groups"].discard(group_uuid)
 
-    def register_listener(self, member_uuid, listener):
+    def register_listener(self, member_uuid, listener: MultiZoneManagerListener):
         """Register a listener for audio group changes of cast uuid.
         On update will call:
         listener.added_to_multizone(group_uuid)
@@ -147,6 +170,22 @@ class MultizoneManager:
         return self._groups[str(group_uuid)]["chromecast"].media_controller
 
 
+class MultiZoneControllerListener(abc.ABC):
+    """Listener for receiving audio group events."""
+
+    @abc.abstractmethod
+    def multizone_member_added(self, group_uuid: str):
+        """The cast has been added to group identified by group_uuid."""
+
+    @abc.abstractmethod
+    def multizone_member_removed(self, group_uuid: str):
+        """The cast has been removed from group identified by group_uuid."""
+
+    @abc.abstractmethod
+    def multizone_status_received(self, group_uuid: str, media_status: MediaStatus):
+        """The group identified by group_uuid, of which the cast is a member, has new status."""
+
+
 class MultizoneController(BaseController):
     """ Controller to monitor audio group members. """
 
@@ -154,9 +193,7 @@ class MultizoneController(BaseController):
         self._members = {}
         self._status_listeners = []
         self._uuid = str(uuid)
-        super(MultizoneController, self).__init__(
-            MULTIZONE_NAMESPACE, target_platform=True
-        )
+        super().__init__(MULTIZONE_NAMESPACE, target_platform=True)
 
     def _add_member(self, uuid, name):
         if uuid not in self._members:
@@ -183,7 +220,7 @@ class MultizoneController(BaseController):
         for listener in list(self._status_listeners):
             listener.multizone_member_removed(uuid)
 
-    def register_listener(self, listener):
+    def register_listener(self, listener: MultiZoneControllerListener):
         """Register a listener for audio group changes. On update will call:
         listener.multizone_member_added(uuid)
         listener.multizone_member_removed(uuid)
@@ -264,6 +301,6 @@ class MultizoneController(BaseController):
 
     def tear_down(self):
         """ Called when controller is destroyed. """
-        super(MultizoneController, self).tear_down()
+        super().tear_down()
 
         self._status_listeners[:] = []

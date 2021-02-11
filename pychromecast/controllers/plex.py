@@ -8,8 +8,8 @@ from copy import deepcopy
 from urllib.parse import urlparse
 
 from . import BaseController
+from ..const import MESSAGE_TYPE
 
-MESSAGE_TYPE = "type"
 STREAM_TYPE_UNKNOWN = "UNKNOWN"
 STREAM_TYPE_BUFFERED = "BUFFERED"
 STREAM_TYPE_LIVE = "LIVE"
@@ -115,7 +115,7 @@ def media_to_chromecast_command(
 
         playQueueID = playQueue.playQueueID
         contentId = playQueue.selectedItem.key
-        contentType = playQueue.playQueueType
+        contentType = playQueue.items[0].listType
         version = server.version
 
     # Chromecasts seem to start playback 5 seconds before the offset.
@@ -175,7 +175,7 @@ class PlexController(BaseController):
     """ Controller to interact with Plex namespace. """
 
     def __init__(self):
-        super(PlexController, self).__init__("urn:x-cast:plex", "9AC194DC")
+        super().__init__("urn:x-cast:plex", "9AC194DC")
         self.app_id = "9AC194DC"
         self.namespace = "urn:x-cast:plex"
         self.request_id = 0
@@ -468,7 +468,7 @@ class PlexApiController(PlexController):
     """A controller that can use PlexAPI."""
 
     def __init__(self, pms):
-        super(PlexApiController, self).__init__()
+        super().__init__()
         self.pms = pms
 
     def _get_current_media(self):

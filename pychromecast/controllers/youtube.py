@@ -6,6 +6,7 @@ import threading
 from casttube import YouTubeSession
 
 from . import BaseController
+from ..const import MESSAGE_TYPE
 from ..error import UnsupportedNamespace
 from ..config import APP_YOUTUBE
 
@@ -13,14 +14,13 @@ YOUTUBE_NAMESPACE = "urn:x-cast:com.google.youtube.mdx"
 TYPE_GET_SCREEN_ID = "getMdxSessionStatus"
 TYPE_STATUS = "mdxSessionStatus"
 ATTR_SCREEN_ID = "screenId"
-MESSAGE_TYPE = "type"
 
 
 class YouTubeController(BaseController):
     """ Controller to interact with Youtube."""
 
     def __init__(self):
-        super(YouTubeController, self).__init__(YOUTUBE_NAMESPACE, APP_YOUTUBE)
+        super().__init__(YOUTUBE_NAMESPACE, APP_YOUTUBE)
         self.status_update_event = threading.Event()
         self._screen_id = None
         self._session = None
